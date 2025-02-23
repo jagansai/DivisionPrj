@@ -37,7 +37,7 @@ public class DivisionDriver {
             Division division = newDivision.get(keyValue.getKey()); // if we have the division, then update the master.
             if (division != null) { // new file has the division ( maybe with updated depts )
                 unionOfDivisions.put(division.getName(), new Division(division.getName(), division.getDepts()));
-                newDivision.remove(keyValue.getKey());
+                newDivision.remove(keyValue.getKey()); // we are done with this Division. Remove it from newDivision.
             } else { // new file does not have the division. Treat this case as the removal of depts.
                 masterDivision.remove(keyValue.getKey());
             }
