@@ -6,7 +6,7 @@ package org.example;
 import java.util.List;
 
 // Trying to keep the class compatable with Java8. Otherwise, we can just make it a record.
-public class Division {
+public class Division implements IDivision {
     private String m_name;
     private List<String> m_depts;
 
