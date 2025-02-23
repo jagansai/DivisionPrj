@@ -35,7 +35,7 @@ public class DivisionTest {
         DivisionDriver.updateDivisions(masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test1/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test1/to_verify.txt")),
-                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test1/new_master_file.txt")));
+                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test1/new_master_file.txt")).stream().skip(1).toList());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class DivisionTest {
         DivisionDriver.updateDivisions(masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test2/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test2/to_verify.txt")),
-                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test2/new_master_file.txt")));
+                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test2/new_master_file.txt")).stream().skip(1).toList());
     }
 
     @Test
@@ -64,6 +64,6 @@ public class DivisionTest {
         DivisionDriver.updateDivisions(masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test3/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test3/to_verify.txt")),
-                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test3/new_master_file.txt")));
+                Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test3/new_master_file.txt")).stream().skip(1).toList());
     }
 }

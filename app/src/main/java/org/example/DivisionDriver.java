@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,30 +36,30 @@ public class DivisionDriver {
                                        String fileName) throws IOException {
 
         Map<String, Division> unionOfDivisions = new HashMap<>();
-
-        for (Map.Entry<String, Division> keyValue : masterDivision.entrySet()) {
-            Division division = newDivision.get(keyValue.getKey()); // if we have the division, then update the master.
-            if (division != null) { // new file has the division ( maybe with updated depts )
-                unionOfDivisions.put(division.getName(), new Division(division.getName(), division.getDepts()));
-                newDivision.remove(keyValue.getKey()); // we are done with this Division. Remove it from newDivision.
-            } else { // new file does not have the division. Treat this case as the removal of depts.
-                masterDivision.remove(keyValue.getKey());
-            }
-        }
-        // now whatever remaining in the newDivision, just add to the unionOfDivisions.
-        unionOfDivisions.putAll(newDivision);
-
-
+        StringBuilder sb = new StringBuilder();
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(fileName),StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
-            StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, Division> keyValue : unionOfDivisions.entrySet()) {
-                sb.append(keyValue.getKey())
-                        .append(COMMA)
-                        .append(String.join(PIPE, keyValue.getValue().getDepts()))
-                        .append(NEW_LINE);
-                bufferedWriter.write(sb.toString());
-                sb.setLength(0);
+            bufferedWriter.write("# " + String.valueOf(ZonedDateTime.now(ZoneId.of("Asia/Singapore")).toLocalTime()) + NEW_LINE);
+            for (Map.Entry<String, Division> keyValue : masterDivision.entrySet()) {
+                Division division = newDivision.get(keyValue.getKey()); // if we have the division, then update the master.
+                if (division != null) { // new file has the division ( maybe with updated depts )
+                    unionOfDivisions.put(division.getName(), new Division(division.getName(), division.getDepts()));
+                    newDivision.remove(keyValue.getKey()); // we are done with this Division. Remove it from newDivision.
+                    writeToFile(keyValue, sb, division, bufferedWriter);
+                }
+            }
+            // now whatever remaining in the newDivision, just add to the file.
+            for (Map.Entry<String, Division> keyValue : newDivision.entrySet()) {
+                writeToFile(keyValue, sb, keyValue.getValue(), bufferedWriter);
             }
         }
+    }
+
+    private static void writeToFile(Map.Entry<String, Division> keyValue, StringBuilder sb, Division division, BufferedWriter bufferedWriter) throws IOException {
+        sb.append(keyValue.getKey())
+                .append(COMMA)
+                .append(String.join(PIPE, division.getDepts()))
+                .append(NEW_LINE);
+        bufferedWriter.write(sb.toString());
+        sb.setLength(0);
     }
 }
