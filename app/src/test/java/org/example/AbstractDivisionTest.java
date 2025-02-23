@@ -14,7 +14,12 @@ public abstract class AbstractDivisionTest {
     private static final String TEST_RESOURCES_PATH = "src/test/resources";
 
     abstract DivisionType getDivision();
-    
+
+    @BeforeEach
+    void setUp() {
+        DivisionDriver.setDivisionType( getDivision() );
+    }
+
     @Test
     void addNewDivision() throws IOException {
 
@@ -22,9 +27,9 @@ public abstract class AbstractDivisionTest {
         // read new file new_file.txt
         // add the new division that's in the new file and create a new master file.
 
-        var masterFileDivisions = DivisionDriver.getDivisions(getDivision(),TEST_RESOURCES_PATH + "/test1/master_file.txt");
-        var newFileDivisions = DivisionDriver.getDivisions(getDivision(),TEST_RESOURCES_PATH + "/test1/new_file.txt");
-        DivisionDriver.updateDivisions( getDivision(), masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test1/new_master_file.txt");
+        var masterFileDivisions = DivisionDriver.getDivisions(TEST_RESOURCES_PATH + "/test1/master_file.txt");
+        var newFileDivisions = DivisionDriver.getDivisions(TEST_RESOURCES_PATH + "/test1/new_file.txt");
+        DivisionDriver.updateDivisions(  masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test1/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test1/to_verify.txt")),
                 Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test1/new_master_file.txt")).stream().skip(1).toList());
@@ -36,9 +41,9 @@ public abstract class AbstractDivisionTest {
         // read new file updates_file.txt
         // update the division that's in the new file and create a new master file.
 
-        var masterFileDivisions = DivisionDriver.getDivisions( getDivision(),TEST_RESOURCES_PATH + "/test2/master_file.txt");
-        var newFileDivisions = DivisionDriver.getDivisions(getDivision(), TEST_RESOURCES_PATH + "/test2/updates_file.txt");
-        DivisionDriver.updateDivisions(getDivision(), masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test2/new_master_file.txt");
+        var masterFileDivisions = DivisionDriver.getDivisions( TEST_RESOURCES_PATH + "/test2/master_file.txt");
+        var newFileDivisions = DivisionDriver.getDivisions( TEST_RESOURCES_PATH + "/test2/updates_file.txt");
+        DivisionDriver.updateDivisions( masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test2/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test2/to_verify.txt")),
                 Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test2/new_master_file.txt")).stream().skip(1).toList());
@@ -51,9 +56,9 @@ public abstract class AbstractDivisionTest {
         // update the division that's in the new file and create a new master file.
         // delete the division that's in the new file and create a new master file.
 
-        var masterFileDivisions = DivisionDriver.getDivisions(getDivision(),TEST_RESOURCES_PATH + "/test3/master_file.txt");
-        var newFileDivisions = DivisionDriver.getDivisions(getDivision(),TEST_RESOURCES_PATH + "/test3/updates_file.txt");
-        DivisionDriver.updateDivisions(getDivision(),masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test3/new_master_file.txt");
+        var masterFileDivisions = DivisionDriver.getDivisions(TEST_RESOURCES_PATH + "/test3/master_file.txt");
+        var newFileDivisions = DivisionDriver.getDivisions(TEST_RESOURCES_PATH + "/test3/updates_file.txt");
+        DivisionDriver.updateDivisions(masterFileDivisions, newFileDivisions, TEST_RESOURCES_PATH + "/test3/new_master_file.txt");
 
         assertEquals( Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test3/to_verify.txt")),
                 Files.readAllLines(Paths.get(TEST_RESOURCES_PATH + "/test3/new_master_file.txt")).stream().skip(1).toList());
