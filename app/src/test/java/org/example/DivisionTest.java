@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author jagan
  */
 public class DivisionTest extends AbstractDivisionTest {
-    public DivisionTest() {
-        super(DivisionType.Division);
+
+    @Override
+    DivisionType getDivision() {
+        return DivisionType.Division;
     }
 }
